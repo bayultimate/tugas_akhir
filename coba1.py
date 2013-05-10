@@ -5,6 +5,7 @@ Created on Apr 29, 2013
 '''
 #!/usr/bin/python
 #open file
+from __future__ import division
 counter = 0
 listSize = 0
 #variable for get data from log#
@@ -63,6 +64,7 @@ noteCounter = 0
 #flowSecond = list()
 #flowPortDest = list()
 flowTotalPacket = list()
+flowPercentage = list()
 #flowPayload = list()
 #flowPeriode = list()
 #flowCounter = 0
@@ -81,12 +83,14 @@ limitSecond = 0
 
 def Processdata():
     localCounter = 0
-    f = open ("/home/bayu/scp/testcase4.txt","r")
+    f = open ("/home/bayu/scp/sniff2.txt","r")
     data = f.readline()
         
     while data:        
         #print data
         splitData = data.split(':')
+        if (len(splitData) < 13):
+            break
         dataYear = splitData[0]
         dataMonth = splitData[1]
         dataDate = splitData[2]
@@ -100,6 +104,8 @@ def Processdata():
         dataPortSrc = splitData[10]
         dataPortDest = splitData[11]
         dataPayload = splitData[12]
+        
+        print (dataNumber)
         
         processYear.insert(localCounter, dataYear)
         processMonth.insert(localCounter, dataMonth)
@@ -487,6 +493,30 @@ def Printflow():
             print ("--------------------------------")
     return
 
+def Participationcalculation():
+    cleanLen = len(cleanNumber)
+    for i in range(0,flowCounter):
+        #flowSum = flowTotalPacket[i]
+        print ("masuk")
+        print (flowTotalPacket[i])
+        print (cleanLen)
+        tempFlowPercentage = (flowTotalPacket[i] / cleanLen) * 100
+        flowPercentage.insert(i, tempFlowPercentage)
+        
+    for i in range(0,flowCounter):
+            #tempFlowTotalPacket = 0
+            print ("-------------------------------")
+            for j in range(0,noteCounter):
+                if (noteFlowId[j] == i):
+                    print (noteNumber[j] + ":" + noteYear[j] + ":" + noteMonth[j] + ":" + noteDate[j] + ":" + noteHour[j] + ":" + noteMinute[j] + ":" + noteSecond[j] + ":" + noteNumber[j] + ":" + noteIpSrc[j] + ":" + noteIpDest[j] + ":" + notePortSrc[j] + ":" + notePortDest[j] + ":" + notePayload[j] + ":" + str(notePeriode[j]) + ":" + str(noteFlowId[j]))
+                    #print (noteCount[j])
+            
+            print("total packet : " + str(flowTotalPacket[i]))
+            print ("packet percentage: " + str(flowPercentage[i]))
+            print ("--------------------------------")
+        
+    return
+
 Processdata()
 waktu()
 Cleandata()
@@ -495,3 +525,4 @@ Selectdata()
 Detectflow()
 #Printnote()
 Printflow()
+Participationcalculation()
